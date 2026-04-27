@@ -1,0 +1,4 @@
+interface:
+  display_name: "MySQL Table Context"
+  short_description: "Fetch MySQL table schema and sample rows"
+  default_prompt: "Use $mysql-table-context to inspect one or more MySQL tables and provide CLI-friendly schema details plus up to 5 sample rows."
