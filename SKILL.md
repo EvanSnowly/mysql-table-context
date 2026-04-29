@@ -46,6 +46,12 @@ python3 scripts/inspect_mysql_table.py --table <table_name> --database <database
 
 ## Environment Variables
 
+This skill auto-loads a local env file at `/home/snow/.codex/skills/mysql-table-context/.env` before validating variables.
+
+Priority:
+
+- Existing process environment variables are kept as-is.
+- Missing variables are filled from the local `.env` file.
 Require these variables:
 
 - `MYSQL_HOST`
@@ -53,9 +59,6 @@ Require these variables:
 - `MYSQL_USER`
 - `MYSQL_PASSWORD`
 - `MYSQL_DATABASE`
-
-This skill may also be driven by a local env file at `/home/snow/.codex/skills/mysql-table-context/.env` if the caller sources it before running the script.
-This skill may also be driven by a local `.env` file if the caller sources it before running the script.
 
 If any are missing, stop and tell the user exactly which variables are missing.
 

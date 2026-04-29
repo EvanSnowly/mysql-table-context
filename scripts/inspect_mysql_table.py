@@ -27,6 +27,27 @@ REQUIRED_ENV_VARS = [
 ]
 
 
+def load_local_env_file():
+    env_path = Path(__file__).resolve().parent.parent / ".env"
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        if not key or key in os.environ:
+            continue
+        value = value.strip()
+        if (value.startswith('"') and value.endswith('"')) or (
+            value.startswith("'") and value.endswith("'")
+        ):
+            value = value[1:-1]
+        os.environ[key] = value
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Inspect one or more MySQL tables in the currently configured database."
@@ -281,6 +302,7 @@ def make_payload(configured_database, normalized_tables, mentioned_databases):
 
 def main():
     args = parse_args()
+    load_local_env_file()
     normalized_tables, mentioned_databases = normalize_requested_tables(args.table, args.database)
     configured_database = os.environ.get("MYSQL_DATABASE")
     payload = make_payload(configured_database, normalized_tables, mentioned_databases)
